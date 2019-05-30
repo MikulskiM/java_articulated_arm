@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * Marek Mikulski and Maciej Kuraż wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy as a beer in return
+ *
  */
 package articulated_arm_project_java;
 
@@ -20,6 +23,7 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Material;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.ImageIcon;
@@ -85,12 +89,12 @@ public class Articulated_arm_project_java extends JFrame{
       
 //      BoundingBox bounds = new BoundingBox();
         
-      Appearance  wygladStozka = new Appearance();
-      wygladStozka.setColoringAttributes(new ColoringAttributes(0.2f,0.2f,0.2f,ColoringAttributes.NICEST));
+      Appearance  wyglad_podlogi = new Appearance();
+      wyglad_podlogi.setColoringAttributes(new ColoringAttributes(0.2f,0.2f,0.2f,ColoringAttributes.NICEST));
       
-      Box graniastoslup = new Box(8.0f, 0.01f, 8.0f, wygladStozka);         // tworzę sferę
+      Box graniastoslup = new Box(8.0f, 0.01f, 8.0f, wyglad_podlogi);         // tworzę płaski graniastosłup, który słuzył nam będzie za podłoże
       
-      Transform3D  p_podlogi = new Transform3D();
+      Transform3D  p_podlogi = new Transform3D();       // przesuwam troche w dół, żeby była idealnie pod ramieniem robota
       p_podlogi.set(new Vector3f(0.0f,-0.7f,0.0f));
 
       p_podlogi.mul(tmp_rot);
@@ -117,13 +121,46 @@ public class Articulated_arm_project_java extends JFrame{
       
       
 //       Transform3D tmp_rot = new Transform3D();
+
+
+
+    // ---------------------------------------    ZABAWA ŚWIATŁEM
+      
+      Material material_ramion = new Material(new Color3f(17.0f, 0.292f,0.0f), new Color3f(17.2f, 0.2f, 0.2f), 
+                                             new Color3f(17.0f, 1.0f,0.0f), new Color3f(17.0f, 0.0f,1.0f), 128.0f);
+      
+      Material material_przegubow = new Material(new Color3f(0.3f, 0.3f,0.3f), new Color3f(0.3f,0.3f,0.3f),
+                                                new Color3f(0.3f, 0.3f, 0.3f), new Color3f(0.3f, 0.3f, 0.3f), 20.0f);
+      
+      ColoringAttributes cattr = new ColoringAttributes();
+      cattr.setShadeModel(ColoringAttributes.SHADE_GOURAUD);
+      
+      Appearance wyglad_ramion = new Appearance();
+      Appearance wyglad_przegubow = new Appearance();
+      
+      wyglad_ramion.setMaterial(material_ramion);
+      wyglad_ramion.setColoringAttributes(cattr);
+      wyglad_przegubow.setMaterial(material_przegubow);
+      wyglad_przegubow.setColoringAttributes(cattr);
+      
+      
+      
+      Color3f kolor_swiatla_kier     = new Color3f(0.7f, 0.7f, 0.75f);
+      BoundingSphere obszar_ogr =  new BoundingSphere(new Point3d(0.0d,0.0d,0.0d), 10.0d);
+      Vector3f kierunek_swiatla_kier = new Vector3f(4.0f, -5.0f, -15.0f);
+      
+      DirectionalLight swiatlo_kier = new DirectionalLight(kolor_swiatla_kier, kierunek_swiatla_kier);
+      swiatlo_kier.setInfluencingBounds(obszar_ogr);
+      
+      scena.addChild(swiatlo_kier);
+      
       
      //PODSTAWA
 
       Appearance wygladPodstawy = new Appearance();
       wygladPodstawy.setColoringAttributes(new ColoringAttributes(0.5f,0.6f,0.6f,ColoringAttributes.NICEST));
      
-      Cylinder podstawa = new Cylinder(0.8f, 0.2f, wygladPodstawy);
+      Cylinder podstawa = new Cylinder(0.8f, 0.2f, wyglad_przegubow);
 
       Transform3D  p_podstawy = new Transform3D();
       p_podstawy.set(new Vector3f(0.0f,-0.6f,0.0f));
@@ -135,12 +172,13 @@ public class Articulated_arm_project_java extends JFrame{
       transformacja_p.addChild(podstawa);
       scena.addChild(transformacja_p);
       
-      //KORPUS
+      
+      // ---------------------------------------- KORPUS
       
       Appearance wygladKorpus = new Appearance();
       wygladKorpus.setColoringAttributes(new ColoringAttributes(2.4f,0.02f,0.02f,ColoringAttributes.NICEST));
      
-      Box korpus = new Box(0.1f, 0.5f, 0.1f, wygladKorpus);
+      Box korpus = new Box(0.1f, 0.5f, 0.1f, wyglad_ramion);
 
       Transform3D p_korpus = new Transform3D();
       p_podstawy.set(new Vector3f(1.0f,0.0f,0.0f));
@@ -156,7 +194,7 @@ public class Articulated_arm_project_java extends JFrame{
       Appearance wygladPrzegub = new Appearance();
       wygladPrzegub.setColoringAttributes(new ColoringAttributes(0.6f,0.6f,0.6f,ColoringAttributes.NICEST));
      
-      Cylinder przegub_1 = new Cylinder(0.15f, 0.21f, wygladPrzegub);
+      Cylinder przegub_1 = new Cylinder(0.15f, 0.21f, wyglad_przegubow);
 
       Transform3D  p_przegub_1 = new Transform3D();
       p_przegub_1.set(new Vector3f(0.0f,0.58f,0.0f));
@@ -176,7 +214,7 @@ public class Articulated_arm_project_java extends JFrame{
       Appearance wygladRamie = new Appearance();
       wygladRamie.setColoringAttributes(new ColoringAttributes(2.4f,0.02f,0.02f,ColoringAttributes.NICEST));
      
-      Box ramie = new Box(0.1f, 0.5f, 0.1f, wygladRamie);
+      Box ramie = new Box(0.1f, 0.5f, 0.1f, wyglad_ramion);
 
       Transform3D p_ramie = new Transform3D();
       p_ramie.set(new Vector3f(-0.4f,1.0f,0.0f));
@@ -192,7 +230,7 @@ public class Articulated_arm_project_java extends JFrame{
       
         //PRZEGUB 2
      
-      Cylinder przegub_2 = new Cylinder(0.15f, 0.21f, wygladPrzegub);
+      Cylinder przegub_2 = new Cylinder(0.15f, 0.21f, wyglad_przegubow);
 
       Transform3D  p_przegub_2 = new Transform3D();
       p_przegub_2.set(new Vector3f(-0.82f,1.42f,0.0f));
@@ -210,7 +248,7 @@ public class Articulated_arm_project_java extends JFrame{
       //CHWYTAK
 //     
      
-      Box chwytak = new Box(0.1f, 0.25f, 0.1f, wygladRamie);
+      Box chwytak = new Box(0.1f, 0.25f, 0.1f, wyglad_ramion);
 
       Transform3D p_chwytak = new Transform3D();
       p_chwytak.set(new Vector3f(-1.08f,1.27f,0.0f));
@@ -224,7 +262,8 @@ public class Articulated_arm_project_java extends JFrame{
       transformacja_c.addChild(chwytak);
       scena.addChild(transformacja_c);
       
-        
+      
+      
         
         return scena;
     }
