@@ -36,7 +36,7 @@ import javax.vecmath.Vector3f;
 
 /**
  *
- * @author Praca
+ * @author Marek Mikulski
  */
 public class Articulated_arm_project_java extends JFrame{
 
