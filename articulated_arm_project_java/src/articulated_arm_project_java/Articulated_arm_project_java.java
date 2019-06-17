@@ -270,22 +270,22 @@ public class Articulated_arm_project_java extends JFrame implements KeyListener 
         
       //OBRACANIE ROBOTA PRZYCISKAMi
         obrot_korpus_p = new Transform3D();
-        obrot_korpus_p.rotY(-Math.PI/70);
+        obrot_korpus_p.rotY(-Math.PI/50);
         
         obrot_korpus_l = new Transform3D();
-        obrot_korpus_l.rotY(Math.PI/70);
+        obrot_korpus_l.rotY(Math.PI/50);
         
         obrot_ramie_d = new Transform3D();
-        obrot_ramie_d.rotZ(-Math.PI/70);
+        obrot_ramie_d.rotZ(-Math.PI/50);
         
         obrot_ramie_g = new Transform3D();
-        obrot_ramie_g.rotZ(Math.PI/70);
+        obrot_ramie_g.rotZ(Math.PI/50);
         
         obrot_chwytak_d = new Transform3D();
-        obrot_chwytak_d.rotZ(-Math.PI/70);
+        obrot_chwytak_d.rotZ(-Math.PI/50);
         
         obrot_chwytak_g = new Transform3D();
-        obrot_chwytak_g.rotZ(Math.PI/70);
+        obrot_chwytak_g.rotZ(Math.PI/50);
       
       
     }  
@@ -318,32 +318,37 @@ public class Articulated_arm_project_java extends JFrame implements KeyListener 
             
                 pos_korpus.mul(obrot_korpus_p);
                 korpus_TG.setTransform(pos_korpus);  
+                break;
                 
             case KeyEvent.VK_M:
            
                 pos_korpus.mul(obrot_korpus_l);
                 korpus_TG.setTransform(pos_korpus);  
+                break;
                 
             case KeyEvent.VK_J:
            
                 pos_przegub_1.mul(obrot_ramie_d);
                 przegub_1_TG.setTransform(pos_przegub_1);  
+                break;
                 
             case KeyEvent.VK_H:
            
                 pos_przegub_1.mul(obrot_ramie_g);
                 przegub_1_TG.setTransform(pos_przegub_1);
+                break;
                 
             case KeyEvent.VK_Y:
            
                 pos_przegub_2.mul(obrot_chwytak_d);
                 przegub_2_TG.setTransform(pos_przegub_2); 
+                break;
                 
             case KeyEvent.VK_U:
            
                 pos_przegub_2.mul(obrot_chwytak_g);
                 przegub_2_TG.setTransform(pos_przegub_2); 
-                
+                break;
                 
                 }
         }
